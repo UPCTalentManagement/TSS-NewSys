@@ -331,7 +331,7 @@
 
     <script>
         // Replace this with your actual Google Apps Script web app URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyQ5ndpXx1HwNF89vWEAH6rZ8Jh8rcDSNEbkWG2Aba4TF-CjOs877b9xt4YHaH3M1ngQ/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzho6LFqVeQNi6ZZ6iEwq1M5AiDvvHRIbncQ8pA-h4DzNXDfLB7yttAbU0TxV1PCnPcig/exec';
         
         let currentUser = {
             id: '',
@@ -462,10 +462,12 @@
                                 <td>${new Date(req.date).toLocaleDateString("en-GB")}</td>
                                 <td>${req.notes}</td>
                                 <td>
-                                    <button class="btn btn-approve" onclick="approveRequest(${index}, '${req.id}', '${new Date(req.date).toLocaleDateString("en-GB")}')">Approve</button>
-                                    <button class="btn btn-decline" onclick="declineRequest(${index}, '${req.id}', '${new Date(req.date).toLocaleDateString("en-GB")}')">Decline</button>
+                                    <button class="btn btn-approve" onclick="approveRequest('${req.newID}')">Approve</button>
+                                    <button class="btn btn-decline" onclick="declineRequest('${req.newID}')">Decline</button>
                                 </td>
                             `;
+                            console.log(req);
+                            console.log(data);
                         });
                         
                         document.getElementById('pendingTable').style.display = 'block';
@@ -478,69 +480,120 @@
         }
 
         // Approve Request
-        function approveRequest(index, id, date) {
-            const requestData = {
-                action: 'updateRequest',
-                id: id,
-                date: date,
-                status: 'Approved'
-            };
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                'Content-Type': 'application/json'   // ← important
-            },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                response.json()
-                
-                
-            }
-            )
-                
-        
-            .then(data => {
-                if (data.success) {
+        // function approveRequest(index, id, date) {
+        //     const requestData = {
+        //         action: 'updateRequest',
+        //         id: id,
+        //         date: date,
+        //         status: 'Approved'
+        //     };
+        //     fetch(SCRIPT_URL, {
+        //         method: 'POST',
+        //         mode: 'no-cors',
+        //         headers: {
+        //         'Content-Type': 'application/json' },  // ← important
+        //         body: JSON.stringify(requestData)
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data) {
                     
-                    showMessage('success', 'Request approved!', 'admin');
-                    loadPendingRequests();
-                } else {
-                    showMessage('error', data.message || 'else Error approving request', 'admin');
-                }
-            })
-            .catch(error => {
-                showMessage('error', 'catch Error approving request', 'admin');
+        //             showMessage('success', 'Request approved!', 'admin');
+        //             loadPendingRequests();
+        //         } else {
+        //             showMessage('error', data.message || 'else Error approving request', 'admin');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         showMessage('success', 'Request approved!', 'admin');
+        //         console.log(error);
+        //         loadPendingRequests();
                 
-            });
-        }
-
-        // Decline Request
-        function declineRequest(index, id, date) {
-            const requestData = {
-                action: 'updateRequest',
-                id: id,
-                date: date,
-                status: 'Declined'
-            };
-
+        //     });
+        // }
+        function approveRequest(uniqueID) {
             fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(requestData)
+                method: "POST",
+                mode: 'no-cors',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                action: "updateRequest",
+                uniqueID: uniqueID,
+                status: "Approved"
+                })
             })
-            .then(response => response.json())
+            
+            // .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    showMessage('success', 'Request declined!', 'admin');
-                    loadPendingRequests();
-                } else {
-                    showMessage('error', data.message || 'Error declining request', 'admin');
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
                 }
+                else {
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
+                }
+            });
+            }
+        // function approveRequest(uniqueID) {
+        //     const requestData = {
+        //         action: 'updateRequest',
+        //         uniqueID: uniqueID,
+        //         status: 'Approved'
+        //     };
+
+        //     fetch(SCRIPT_URL, {
+        //         method: 'POST',
+        //         mode: 'no-cors',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(requestData)
+        //     })
+        //     .then(async response => {
+        //         const text = await response.text();  // Apps Script sometimes sends plain text
+        //         let data;
+
+        //         try {
+        //             data = JSON.parse(text);
+        //         } catch {
+        //             throw new Error("Invalid JSON returned from server: " + text);
+        //         }
+
+        //         if (data.success) {
+        //             showMessage('success', 'Request approved!', 'admin');
+        //             loadPendingRequests();
+        //         } else {
+        //             showMessage('error', data.message || 'Error approving request', 'admin');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         showMessage('error', 'Request failed: ' + error.message, 'admin');
+        //         console.error('Error approving request:', error);
+        //     });
+        // }
+        // Decline Request
+        function declineRequest(uniqueID) {
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: 'no-cors',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                action: "updateRequest",
+                uniqueID: uniqueID,
+                status: "Declined"
+                })
             })
-            .catch(error => {
-                showMessage('error', 'Error declining request', 'admin');
+            // .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
+                }
+                else {
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
+                }
             });
         }
 
