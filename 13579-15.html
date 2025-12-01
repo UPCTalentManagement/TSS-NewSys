@@ -65,6 +65,7 @@
         <div class="card" onclick="openPage('task')">🗂️ Task Management</div>
         <div class="card" onclick="openPage('dashboard')">📊 Dashboard</div>
         <div class="card" onclick="openPage('holiday')">🏖️ Holidays</div>
+        <div class="card" onclick="openPage('attendance')">🕒 Attendance</div>
     </div>
 
     <script>
@@ -81,6 +82,8 @@
             } else if (type === 'holiday') {
                 window.location.href = '13579-21.html';
                 // Replace with actual page: window.location.href = 'holidays.html';
+            } else if (type === 'attendance') {
+                window.location.href = 'https://docs.google.com/spreadsheets/d/1hYzzT7jNpI3AYri1Th75s50hCfNPYKV5S4VKqVWytuE/edit?usp=sharing';
             }
         }
         document.addEventListener('keydown', function(e) {

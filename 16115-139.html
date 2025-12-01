@@ -371,7 +371,7 @@
             window.location.href = "loginPageFin.html";
         }
         // Replace this with your actual Google Apps Script web app URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyQ5ndpXx1HwNF89vWEAH6rZ8Jh8rcDSNEbkWG2Aba4TF-CjOs877b9xt4YHaH3M1ngQ/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxf5MDSQKyijf9MQxAienCfC9OaTPAHvBQrX5wCp5pGgwMwenjxTouswnWu_BBBJjn43g/exec';
         
         let currentUser = {
             id: '1',
@@ -424,6 +424,9 @@
             
             const date = document.getElementById('vacationDate').value;
             const notes = document.getElementById('notes').value;
+            const button = this.querySelector('button[type="submit"]');
+            button.disabled = true;
+            button.textContent = 'Submitting...';
 
             const requestData = {
                 action: 'submitRequest',
@@ -443,12 +446,18 @@
                     showMessage('success', 'Request submitted successfully!', 'employee');
                     document.getElementById('vacationForm').reset();
                     loadEmployeeData();
+                    button.disabled = false;
+                    button.textContent = 'Submit Request';
                 } else {
                     showMessage('error', data.message || 'Error submitting request', 'employee');
+                    button.disabled = false;
+                    button.textContent = 'Submit Request';
                 }
             })
             .catch(error => {
                 showMessage('error', 'Error submitting request', 'employee');
+                button.disabled = false;
+                button.textContent = 'Submit Request';
             });
         });
 
