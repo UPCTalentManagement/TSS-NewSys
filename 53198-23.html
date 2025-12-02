@@ -48,44 +48,25 @@
             transform: translateY(-8px);
             background: white;
         }
-         @media (max-width: 600px) {
-        .card {
-            padding: 25px;
-        }
-        .card-container {
-            gap: 20px;
-        }
-    }
     </style>
 </head>
 <body>
-    <h1>Welcome Dr Noha to Your Dashboard</h1>
+    <h1>Welcome to Your Dashboard</h1>
 
     <div class="card-container">
         <div class="card" onclick="openPage('task')">🗂️ Task Management</div>
-        
-        <div class="card" onclick="openPage('holiday')">🏖️ Holidays</div>
         <div class="card" onclick="openPage('dashboard')">📊 Dashboard</div>
-        <div class="card" onclick="openPage('attendance')">🕒 Attendance </div>
+        <div class="card" onclick="openPage('holiday')">🏖️ Holidays</div>
     </div>
 
     <script>
-        if (sessionStorage.getItem("authenticated") !== "true") {
-            window.location.href = "loginPageFin.html";
-        }
         function openPage(type) {
             if (type === 'task') {
                 window.location.href = '53198-27.html';
                 // Replace with actual page: window.location.href = 'tasks.html';
             } 
             else if (type === 'holiday') {
-                window.location.href = '53198-7525.html';
-                // Replace with actual page: window.location.href = 'holidays.html';
-            }else if (type === 'dashboard') {
-                window.location.href = 'MDB.html';
-                // Replace with actual page: window.location.href = 'holidays.html';
-            }else if (type === 'attendance') {
-                window.location.href = 'https://docs.google.com/spreadsheets/d/1yLHW_xO5HNNxsnGoO8nIWkooNNbP27x2szRgNKi5IE8/edit?usp=sharing';
+                window.location.href = '53198-25.html';
                 // Replace with actual page: window.location.href = 'holidays.html';
             }
         }
