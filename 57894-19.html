@@ -480,9 +480,9 @@
             <button class="btn btn-success" onclick="openAddModalP()">
                 Add New Task
             </button>
-            <button class="btn btn-success" onclick="openAddModal()">
+            <!-- <button class="btn btn-success" onclick="openAddModal()">
                 Add New Project
-            </button>
+            </button> -->
             <span style="margin-left: auto; color: #666;" id="taskCount">0 tasks loaded</span>
         </div>
 
@@ -752,6 +752,9 @@
     </footer>
 
     <script>
+        if (sessionStorage.getItem("authenticated") !== "true") {
+            window.location.href = "loginPageFin.html";
+        }
         let allTasks = [];
         let filteredTasks = [];
         let currentEditingRow = null;
@@ -842,9 +845,7 @@
                             <button class="btn btn-warning" onclick='editTask(${JSON.stringify(task).replace(/'/g, "&apos;")})'>
                                 ✏️ Edit
                             </button>
-                            <button class="btn btn-danger" onclick='openDeleteModal(${JSON.stringify(task).replace(/'/g, "&apos;")})'>
-                                🗑️ Delete
-                            </button>
+                            
                         </div>
                     </td>
                 </tr>
