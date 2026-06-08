@@ -330,6 +330,9 @@
     </div>
 
     <script>
+        if (sessionStorage.getItem("authenticated") !== "true") {
+            window.location.href = "loginPageFina.html";
+        }
         // Replace this with your actual Google Apps Script web app URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzho6LFqVeQNi6ZZ6iEwq1M5AiDvvHRIbncQ8pA-h4DzNXDfLB7yttAbU0TxV1PCnPcig/exec';
         
