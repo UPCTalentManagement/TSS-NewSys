@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #66ead8 0%, #4ba257 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -41,15 +41,15 @@
         }
 
         h1 {
-            color: #66ead8;
+            color: #667eea;
             margin-bottom: 30px;
             text-align: center;
         }
 
         h2 {
-            color: #58cbbb;
+            color: #667eea;
             margin-bottom: 20px;
-            border-bottom: 2px solid #66ead8;
+            border-bottom: 2px solid #667eea;
             padding-bottom: 10px;
         }
 
@@ -75,7 +75,7 @@
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #58cbbb;
+            border-color: #667eea;
         }
 
         textarea {
@@ -84,7 +84,7 @@
         }
 
         .btn {
-            background: #58cbbb;
+            background: #667eea;
             color: white;
             padding: 12px 30px;
             border: none;
@@ -97,7 +97,7 @@
         }
 
         .btn:hover {
-            background: #66ead8;
+            background: #5568d3;
         }
 
         .btn-secondary {
@@ -131,7 +131,7 @@
         }
 
         .balance-card {
-            background: linear-gradient(135deg, #58cbbb 0%, #4ba257 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -165,7 +165,7 @@
         }
 
         .history-table thead {
-            background: #58cbbb;
+            background: #667eea;
             color: white;
         }
 
@@ -223,8 +223,8 @@
         }
 
         .tab.active {
-            color: #58cbbb;
-            border-bottom-color: #59cabb;
+            color: #667eea;
+            border-bottom-color: #667eea;
         }
 
         .tab-content {
@@ -238,7 +238,7 @@
         .loading {
             text-align: center;
             padding: 20px;
-            color: #66ead8;
+            color: #667eea;
         }
 
         .message {
@@ -301,89 +301,50 @@
 </head>
 <body>
     
-    <!-- Employee App Container -->
-    <div class="app-container" id="employeeApp">
+    <!-- Admin App Container -->
+    <div class="app-container" id="adminApp">
         <div class="header">
-            <h1>🏖️ My Vacation Requests</h1>
+            <h1>👨‍💼 Admin Dashboard</h1>
             <div class="user-info">
-                <p>Hello</p>
-                 
-                <span id="employeeNameDisplay"></span>
+                <span id="adminNameDisplay">Welcom Dr. Salma</span>
                 <!-- <button class="btn logout-btn" onclick="logout()">Logout</button> -->
             </div>
         </div>
 
-        <div class="message" id="employeeMessage"></div>
+        <div class="message" id="adminMessage"></div>
 
-        <div class="balance-card" id="balanceCard">
-            <!-- <div class="balance-item">
-                <h3>Total Balance</h3>
-                <p id="totalBalance">-</p>
-            </div> -->
-            <div class="balance-item">
-                <h3>Available Balance</h3>
-                <p id="availableBalance">-</p>
-            </div>
-            <div class="balance-item">
-                <h3>Used Balance</h3>
-                <p id="usedBalance">-</p>
-            </div>
-        </div>
-
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('newRequest')">New Request</button>
-            <button class="tab" onclick="switchTab('history')">My History</button>
-        </div>
-
-        <div class="tab-content active" id="newRequestTab">
-            <h2>Request Day Off</h2>
-            <form id="vacationForm">
-                <div class="form-group">
-                    <label for="vacationDate">Date</label>
-                    <input type="date" id="vacationDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Notes</label>
-                    <textarea id="notes" placeholder="Reason for leave..."></textarea>
-                </div>
-                <button type="submit" class="btn">Submit Request</button>
-            </form>
-        </div>
-
-        <div class="tab-content" id="historyTab">
-            <h2>Request History</h2>
-            <div id="historyLoading" class="loading">Loading...</div>
-            <table class="history-table" id="historyTable" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Notes</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="historyBody"></tbody>
-            </table>
-        </div>
+        <h2>Pending Requests</h2>
+        <div id="pendingLoading" class="loading">Loading...</div>
+        <table class="history-table" id="pendingTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="pendingBody"></tbody>
+        </table>
     </div>
 
     <script>
         if (sessionStorage.getItem("authenticated") !== "true") {
-            window.location.href = "loginPageFin.html";
+            window.location.href = "loginPageFina.html";
         }
         // Replace this with your actual Google Apps Script web app URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxf5MDSQKyijf9MQxAienCfC9OaTPAHvBQrX5wCp5pGgwMwenjxTouswnWu_BBBJjn43g/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzho6LFqVeQNi6ZZ6iEwq1M5AiDvvHRIbncQ8pA-h4DzNXDfLB7yttAbU0TxV1PCnPcig/exec';
         
         let currentUser = {
-            id: '14',
-            name: 'Dr Salma',
+            id: '',
+            name: '',
             role: ''
         };
 
         // Login Handler
-        // currentUser.name = "Dr Mahmoud";
-        document.getElementById('employeeNameDisplay').textContent = currentUser.name;
-        document.getElementById('employeeApp').style.display = 'block';
-        loadEmployeeData();
+        document.getElementById('adminApp').style.display = 'block';
+        loadPendingRequests();
             
 
         // Logout
@@ -406,67 +367,58 @@
 
         // Load Employee Data
         function loadEmployeeData() {
-            fetch(`${SCRIPT_URL}?action=getBalance&id=${currentUser.id}`)
+            fetch(`${SCRIPT_URL}?action=getBalance&id=1`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // document.getElementById('totalBalance').textContent = data.total.toFixed(0) || 0;
-                        document.getElementById('availableBalance').textContent = data.available.toFixed(0) || 0;
-                        document.getElementById('usedBalance').textContent = data.used.toFixed(0) || 0;
+                        document.getElementById('totalBalance').textContent = data.total || 0;
+                        document.getElementById('availableBalance').textContent = data.available || 0;
+                        document.getElementById('usedBalance').textContent = data.used || 0;
                     }
                 })
                 .catch(error => showMessage('error', 'Error loading balance', 'employee'));
         }
 
         // Submit Vacation Request
-        document.getElementById('vacationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // document.getElementById('vacationForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
             
-            const date = document.getElementById('vacationDate').value;
-            const notes = document.getElementById('notes').value;
-            const button = this.querySelector('button[type="submit"]');
-            button.disabled = true;
-            button.textContent = 'Submitting...';
+        //     const date = document.getElementById('vacationDate').value;
+        //     const notes = document.getElementById('notes').value;
 
-            const requestData = {
-                action: 'submitRequest',
-                id: currentUser.id,
-                name: currentUser.name,
-                date: date,
-                notes: notes
-            };
+        //     const requestData = {
+        //         action: 'submitRequest',
+        //         id: "1",
+        //         name: "Dr Arafat",
+        //         date: date,
+        //         notes: notes
+        //     };
 
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage('success', 'Request submitted successfully!', 'employee');
-                    document.getElementById('vacationForm').reset();
-                    loadEmployeeData();
-                    button.disabled = false;
-                    button.textContent = 'Submit Request';
-                } else {
-                    showMessage('error', data.message || 'Error submitting request', 'employee');
-                    button.disabled = false;
-                    button.textContent = 'Submit Request';
-                }
-            })
-            .catch(error => {
-                showMessage('error', 'Error submitting request', 'employee');
-                button.disabled = false;
-                button.textContent = 'Submit Request';
-            });
-        });
+        //     fetch(SCRIPT_URL, {
+        //         method: 'POST',
+        //         body: JSON.stringify(requestData)
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data.success) {
+        //             showMessage('success', 'Request submitted successfully!', 'employee');
+        //             document.getElementById('vacationForm').reset();
+        //             loadEmployeeData();
+        //         } else {
+        //             showMessage('error', data.message || 'Error submitting request', 'employee');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         showMessage('error', 'Error submitting request', 'employee');
+        //     });
+        // });
 
         // Load History
         function loadHistory() {
             document.getElementById('historyLoading').style.display = 'block';
             document.getElementById('historyTable').style.display = 'none';
 
-            fetch(`${SCRIPT_URL}?action=getHistory&id=${currentUser.id}`)
+            fetch(`${SCRIPT_URL}?action=getHistory&id=1`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('historyLoading').style.display = 'none';
@@ -477,7 +429,7 @@
                         data.requests.forEach(req => {
                             const row = tbody.insertRow();
                             row.innerHTML = `
-                                <td>${new Date(req.date).toLocaleDateString("en-GB")}</td>
+                                <td>${req.date}</td>
                                 <td>${req.notes}</td>
                                 <td><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
                             `;
@@ -505,18 +457,37 @@
                         const tbody = document.getElementById('pendingBody');
                         tbody.innerHTML = '';
                         
-                        data.requests.forEach((req, index) => {
-                            const row = tbody.insertRow();
-                            row.innerHTML = `
-                                <td>${req.id}</td>
-                                <td>${req.name}</td>
-                                <td>${req.date}</td>
-                                <td>${req.notes}</td>
-                                <td>
-                                    <button class="btn btn-approve" onclick="approveRequest(${index}, '${req.id}', '${req.date}')">Approve</button>
-                                    <button class="btn btn-decline" onclick="declineRequest(${index}, '${req.id}', '${req.date}')">Decline</button>
-                                </td>
-                            `;
+                        // data.requests.forEach((req, index) => {
+                        //     const row = tbody.insertRow();
+                        //     row.innerHTML = `
+                        //         <td>${req.id}</td>
+                        //         <td>${req.name}</td>
+                        //         <td>${new Date(req.date).toLocaleDateString("en-GB")}</td>
+                        //         <td>${req.notes}</td>
+                        //         <td>
+                        //             <button class="btn btn-approve" onclick="approveRequest('${req.newID}')">Approve</button>
+                        //             <button class="btn btn-decline" onclick="declineRequest('${req.newID}')">Decline</button>
+                        //         </td>
+                        //     `;
+                        data.requests.forEach((req) => {
+
+                        if (Number(req.id) < 5 || Number(req.id) > 7) {
+                            return; // Skip this record
+                        }
+
+                        const row = tbody.insertRow();
+                        row.innerHTML = `
+                            <td>${req.id}</td>
+                            <td>${req.name}</td>
+                            <td>${new Date(req.date).toLocaleDateString("en-GB")}</td>
+                            <td>${req.notes}</td>
+                            <td>
+                                <button class="btn btn-approve" onclick="approveRequest('${req.newID}')">Approve</button>
+                                <button class="btn btn-decline" onclick="declineRequest('${req.newID}')">Decline</button>
+                            </td>
+                        `;
+                            console.log(req);
+                            console.log(data);
                         });
                         
                         document.getElementById('pendingTable').style.display = 'block';
@@ -529,56 +500,120 @@
         }
 
         // Approve Request
-        function approveRequest(index, id, date) {
-            const requestData = {
-                action: 'updateRequest',
-                id: id,
-                date: date,
-                status: 'Approved'
-            };
-
+        // function approveRequest(index, id, date) {
+        //     const requestData = {
+        //         action: 'updateRequest',
+        //         id: id,
+        //         date: date,
+        //         status: 'Approved'
+        //     };
+        //     fetch(SCRIPT_URL, {
+        //         method: 'POST',
+        //         mode: 'no-cors',
+        //         headers: {
+        //         'Content-Type': 'application/json' },  // ← important
+        //         body: JSON.stringify(requestData)
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data) {
+                    
+        //             showMessage('success', 'Request approved!', 'admin');
+        //             loadPendingRequests();
+        //         } else {
+        //             showMessage('error', data.message || 'else Error approving request', 'admin');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         showMessage('success', 'Request approved!', 'admin');
+        //         console.log(error);
+        //         loadPendingRequests();
+                
+        //     });
+        // }
+        function approveRequest(uniqueID) {
             fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(requestData)
+                method: "POST",
+                mode: 'no-cors',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                action: "updateRequest",
+                uniqueID: uniqueID,
+                status: "Approved"
+                })
             })
-            .then(response => response.json())
+            
+            // .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    showMessage('success', 'Request approved!', 'admin');
-                    loadPendingRequests();
-                } else {
-                    showMessage('error', data.message || 'Error approving request', 'admin');
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
                 }
-            })
-            .catch(error => {
-                showMessage('error', 'Error approving request', 'admin');
+                else {
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
+                }
             });
-        }
+            }
+        // function approveRequest(uniqueID) {
+        //     const requestData = {
+        //         action: 'updateRequest',
+        //         uniqueID: uniqueID,
+        //         status: 'Approved'
+        //     };
 
+        //     fetch(SCRIPT_URL, {
+        //         method: 'POST',
+        //         mode: 'no-cors',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(requestData)
+        //     })
+        //     .then(async response => {
+        //         const text = await response.text();  // Apps Script sometimes sends plain text
+        //         let data;
+
+        //         try {
+        //             data = JSON.parse(text);
+        //         } catch {
+        //             throw new Error("Invalid JSON returned from server: " + text);
+        //         }
+
+        //         if (data.success) {
+        //             showMessage('success', 'Request approved!', 'admin');
+        //             loadPendingRequests();
+        //         } else {
+        //             showMessage('error', data.message || 'Error approving request', 'admin');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         showMessage('error', 'Request failed: ' + error.message, 'admin');
+        //         console.error('Error approving request:', error);
+        //     });
+        // }
         // Decline Request
-        function declineRequest(index, id, date) {
-            const requestData = {
-                action: 'updateRequest',
-                id: id,
-                date: date,
-                status: 'Declined'
-            };
-
+        function declineRequest(uniqueID) {
             fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(requestData)
+                method: "POST",
+                mode: 'no-cors',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                action: "updateRequest",
+                uniqueID: uniqueID,
+                status: "Declined"
+                })
             })
-            .then(response => response.json())
+            // .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    showMessage('success', 'Request declined!', 'admin');
-                    loadPendingRequests();
-                } else {
-                    showMessage('error', data.message || 'Error declining request', 'admin');
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
                 }
-            })
-            .catch(error => {
-                showMessage('error', 'Error declining request', 'admin');
+                else {
+                showMessage("success", "Request approved!", "admin");
+                loadPendingRequests();
+                }
             });
         }
 
@@ -595,9 +630,12 @@
             }, 5000);
         }
 
-        // Set minimum date to today
-        document.getElementById('vacationDate').min = new Date().toISOString().split('T')[0];
-        document.addEventListener("keydown", function (e) {
+        document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+
+// Disable Common Developer Tools Shortcuts
+document.addEventListener("keydown", function (e) {
 
     // F12
     if (e.key === "F12") {
@@ -647,6 +685,8 @@
         return false;
     }
 });
+        // Set minimum date to today
+        // document.getElementById('vacationDate').min = new Date().toISOString().split('T')[0];
     </script>
 </body>
 </html>
