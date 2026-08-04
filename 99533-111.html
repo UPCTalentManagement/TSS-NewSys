@@ -397,7 +397,7 @@
                 const data = await response.json();
                 
                 if (data.status === 'success') {
-                    allData = data.data.filter(item => Number(item.id) > 17 || Number(item.id) < 17);
+                    allData = data.data.filter(item => Number(item.id) < 17 || Number(item.id) > 17 );
                     // allData = data.data;
                     displayData(allData);
                     updateStatistics(allData);
