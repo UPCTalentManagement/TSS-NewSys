@@ -322,7 +322,7 @@
             <p>Monitor your team's holiday availability in real-time</p>
         </div>
 
-        <div class="stats-summary" id="statsSummary" style="display: none;">
+        <!-- <div class="stats-summary" id="statsSummary" style="display: none;">
             <div class="stat-card">
                 <h3>Team Members</h3>
                 <div class="value" id="totalMembers">0</div>
@@ -335,7 +335,7 @@
                 <h3>Used Days</h3>
                 <div class="value" id="usedDays">0</div>
             </div>
-        </div>
+        </div> -->
 
         <div class="controls">
             <div class="search-box">
@@ -383,9 +383,9 @@
     </div>
 
     <script>
-        // if (sessionStorage.getItem("authenticated") !== "true") {
-        //     window.location.href = "loginPageFina.html";
-        // }
+        if (sessionStorage.getItem("authenticated") !== "true") {
+            window.location.href = "loginPageFina.html";
+        }
 
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI4eJa5rag12SyiSDZbtSStq3b-kp2--dsVHFV1GkRLPGVSTMjlZZlLAV88SS0e1bcgg/exec';
         let allData = [];
@@ -409,10 +409,10 @@
                 
                 if (data.status === 'success') {
                     allData = data.data.filter(item => Number(item.id) !== 17);
-                    console.log(allData);
-                    console.log(data.data);
+                    // console.log(allData);
+                    // console.log(data.data);
                     displayData(allData);
-                    updateStatistics(allData);
+                    // updateStatistics(allData);
                 } else {
                     throw new Error(data.message || 'Failed to fetch data');
                 }
@@ -427,15 +427,15 @@
         }
 
         function displayData(data) {
-            const tableBody = document.getElementById('tableBody');
-            const tableContainer = document.getElementById('tableContainer');
-            const statsSummary = document.getElementById('statsSummary');
+            // const tableBody = document.getElementById('tableBody');
+            // const tableContainer = document.getElementById('tableContainer');
+            // const statsSummary = document.getElementById('statsSummary');
 
             tableBody.innerHTML = '';
 
             if (data.length === 0) {
                 tableContainer.style.display = 'none';
-                statsSummary.style.display = 'none';
+                // statsSummary.style.display = 'none';
                 document.getElementById('error').style.display = 'block';
                 document.getElementById('errorMessage').textContent = 'No holiday data available';
                 return;
@@ -491,7 +491,7 @@
             });
 
             tableContainer.style.display = 'block';
-            statsSummary.style.display = 'grid';
+            // statsSummary.style.display = 'grid';
         }
 
         function toggleDetails(id) {
@@ -499,15 +499,15 @@
             row.style.display = (row.style.display === 'table-row') ? 'none' : 'table-row';
         }
 
-        function updateStatistics(data) {
-            const totalMembers = data.length;
-            const availableDays = data.reduce((sum, row) => sum + Number(row.available || 0), 0);
-            const usedDays = data.reduce((sum, row) => sum + Number(row.used || 0), 0);
+        // function updateStatistics(data) {
+        //     const totalMembers = data.length;
+        //     const availableDays = data.reduce((sum, row) => sum + Number(row.available || 0), 0);
+        //     const usedDays = data.reduce((sum, row) => sum + Number(row.used || 0), 0);
 
-            document.getElementById('totalMembers').textContent = totalMembers;
-            document.getElementById('availableDays').textContent = availableDays.toFixed(0);
-            document.getElementById('usedDays').textContent = usedDays.toFixed(0);
-        }
+        //     document.getElementById('totalMembers').textContent = totalMembers;
+        //     document.getElementById('availableDays').textContent = availableDays.toFixed(0);
+        //     document.getElementById('usedDays').textContent = usedDays.toFixed(0);
+        // }
 
         function filterData() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
