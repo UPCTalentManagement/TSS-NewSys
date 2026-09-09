@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -307,19 +308,13 @@
             <h1>🏖️ My Vacation Requests</h1>
             <div class="user-info">
                 <p>Hello</p>
-                 
                 <span id="employeeNameDisplay"></span>
-                <!-- <button class="btn logout-btn" onclick="logout()">Logout</button> -->
             </div>
         </div>
 
         <div class="message" id="employeeMessage"></div>
 
         <div class="balance-card" id="balanceCard">
-            <!-- <div class="balance-item">
-                <h3>Total Balance</h3>
-                <p id="totalBalance">-</p>
-            </div> -->
             <div class="balance-item">
                 <h3>Available Balance</h3>
                 <p id="availableBalance">-</p>
@@ -342,6 +337,26 @@
                     <label for="vacationDate">Date</label>
                     <input type="date" id="vacationDate" required>
                 </div>
+                
+                <!-- إضافة اختيار نوع الإجازة -->
+                <div class="form-group">
+                    <label for="leaveType">Leave Type</label>
+                    <select id="leaveType" onchange="toggleCustomTypeInput()" required>
+                        <option value="Pending">Annual Leave</option>
+                        <option value="Wedding">Wedding Leave</option>
+                        <option value="Sick">Sick Leave</option>
+                        <option value="Haj">Haj Leave</option>
+                        <option value="Baby">Baby Leave</option>
+                        <option value="Other">Other...</option>
+                    </select>
+                </div>
+
+                <!-- حقل إدخال نوع الإجازة المخصص -->
+                <div class="form-group" id="customTypeGroup" style="display: none;">
+                    <label for="customType">Specify Leave Type </label>
+                    <input type="text" id="customType" placeholder="Enter custom leave status...">
+                </div>
+
                 <div class="form-group">
                     <label for="notes">Notes</label>
                     <textarea id="notes" placeholder="Reason for leave..."></textarea>
@@ -370,8 +385,8 @@
         if (sessionStorage.getItem("authenticated") !== "true") {
             window.location.href = "loginPageFin.html";
         }
-        // Replace this with your actual Google Apps Script web app URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxf5MDSQKyijf9MQxAienCfC9OaTPAHvBQrX5wCp5pGgwMwenjxTouswnWu_BBBJjn43g/exec';
+
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiUCu8GbX7xfBvFViGr870CGp7Di_PHYCFWn618f0xxjD8MeMBm2HK4zwDYmuaWPPmlQ/exec';
         
         let currentUser = {
             id: '3',
@@ -379,17 +394,26 @@
             role: ''
         };
 
-        // Login Handler
-        // currentUser.name = "Dr Mahmoud";
         document.getElementById('employeeNameDisplay').textContent = currentUser.name;
         document.getElementById('employeeApp').style.display = 'block';
         loadEmployeeData();
+
+        // التبديل بين إظهار وإخفاء حقل الإدخال اليدوي
+        function toggleCustomTypeInput() {
+            const leaveType = document.getElementById('leaveType').value;
+            const customGroup = document.getElementById('customTypeGroup');
+            const customInput = document.getElementById('customType');
             
+            if (leaveType === 'Other') {
+                customGroup.style.display = 'block';
+                customInput.required = true;
+            } else {
+                customGroup.style.display = 'none';
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
 
-        // Logout
-       
-
-        // Tab Switching
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -404,13 +428,11 @@
             }
         }
 
-        // Load Employee Data
         function loadEmployeeData() {
             fetch(`${SCRIPT_URL}?action=getBalance&id=${currentUser.id}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // document.getElementById('totalBalance').textContent = data.total.toFixed(0) || 0;
                         document.getElementById('availableBalance').textContent = data.available.toFixed(0) || 0;
                         document.getElementById('usedBalance').textContent = data.used.toFixed(0) || 0;
                     }
@@ -424,6 +446,17 @@
             
             const date = document.getElementById('vacationDate').value;
             const notes = document.getElementById('notes').value;
+            const leaveType = document.getElementById('leaveType').value;
+            const customType = document.getElementById('customType').value;
+
+            // تحديد الحالة المتجهة لقاعدة البيانات (Pending أم القيمة المخصصة)
+            let statusValue = 'Pending';
+            if (leaveType === 'Other') {
+                statusValue = customType.trim();
+            } else if (leaveType !== 'Pending') {
+                statusValue = leaveType;
+            }
+
             const button = this.querySelector('button[type="submit"]');
             button.disabled = true;
             button.textContent = 'Submitting...';
@@ -433,7 +466,8 @@
                 id: currentUser.id,
                 name: currentUser.name,
                 date: date,
-                notes: notes
+                notes: notes,
+                status: statusValue // إرسال حالة الإجازة المحددة
             };
 
             fetch(SCRIPT_URL, {
@@ -445,6 +479,7 @@
                 if (data.success) {
                     showMessage('success', 'Request submitted successfully!', 'employee');
                     document.getElementById('vacationForm').reset();
+                    toggleCustomTypeInput();
                     loadEmployeeData();
                     button.disabled = false;
                     button.textContent = 'Submit Request';
@@ -461,7 +496,6 @@
             });
         });
 
-        // Load History
         function loadHistory() {
             document.getElementById('historyLoading').style.display = 'block';
             document.getElementById('historyTable').style.display = 'none';
@@ -492,97 +526,6 @@
                 });
         }
 
-        // Load Pending Requests (Admin)
-        function loadPendingRequests() {
-            document.getElementById('pendingLoading').style.display = 'block';
-            document.getElementById('pendingTable').style.display = 'none';
-
-            fetch(`${SCRIPT_URL}?action=getPending`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('pendingLoading').style.display = 'none';
-                    if (data.success) {
-                        const tbody = document.getElementById('pendingBody');
-                        tbody.innerHTML = '';
-                        
-                        data.requests.forEach((req, index) => {
-                            const row = tbody.insertRow();
-                            row.innerHTML = `
-                                <td>${req.id}</td>
-                                <td>${req.name}</td>
-                                <td>${req.date}</td>
-                                <td>${req.notes}</td>
-                                <td>
-                                    <button class="btn btn-approve" onclick="approveRequest(${index}, '${req.id}', '${req.date}')">Approve</button>
-                                    <button class="btn btn-decline" onclick="declineRequest(${index}, '${req.id}', '${req.date}')">Decline</button>
-                                </td>
-                            `;
-                        });
-                        
-                        document.getElementById('pendingTable').style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('pendingLoading').style.display = 'none';
-                    showMessage('error', 'Error loading requests', 'admin');
-                });
-        }
-
-        // Approve Request
-        function approveRequest(index, id, date) {
-            const requestData = {
-                action: 'updateRequest',
-                id: id,
-                date: date,
-                status: 'Approved'
-            };
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage('success', 'Request approved!', 'admin');
-                    loadPendingRequests();
-                } else {
-                    showMessage('error', data.message || 'Error approving request', 'admin');
-                }
-            })
-            .catch(error => {
-                showMessage('error', 'Error approving request', 'admin');
-            });
-        }
-
-        // Decline Request
-        function declineRequest(index, id, date) {
-            const requestData = {
-                action: 'updateRequest',
-                id: id,
-                date: date,
-                status: 'Declined'
-            };
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage('success', 'Request declined!', 'admin');
-                    loadPendingRequests();
-                } else {
-                    showMessage('error', data.message || 'Error declining request', 'admin');
-                }
-            })
-            .catch(error => {
-                showMessage('error', 'Error declining request', 'admin');
-            });
-        }
-
-        // Show Message
         function showMessage(type, text, view) {
             const messageId = view === 'employee' ? 'employeeMessage' : 'adminMessage';
             const messageEl = document.getElementById(messageId);
@@ -595,8 +538,18 @@
             }, 5000);
         }
 
-        // Set minimum date to today
         document.getElementById('vacationDate').min = new Date().toISOString().split('T')[0];
+        
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "F12") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "j") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.key.toLowerCase() === "u") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.key.toLowerCase() === "s") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.key.toLowerCase() === "a") { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.key.toLowerCase() === "c") { e.preventDefault(); return false; }
+        });
     </script>
 </body>
 </html>
