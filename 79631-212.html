@@ -471,7 +471,7 @@
                         //     `;
                         data.requests.forEach((req) => {
 
-                        if (Number(req.id) < 5 || Number(req.id) > 7) {
+                        if (Number(req.id) < 5 || Number(req.id) > 7 && Number(req.id) !== 16 && Number(req.id) !== 18) {
                             return; // Skip this record
                         }
 
